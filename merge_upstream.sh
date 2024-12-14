@@ -2,7 +2,7 @@
 set -e
 
 # Kernel
-git pull --no-rebase msm-5.4 $1
+#git pull --no-rebase msm-5.4 $1
 
 # Techpacks
 git subtree pull --prefix=techpack/audio audio $1 || git merge --abort || :
