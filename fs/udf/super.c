@@ -1159,9 +1159,9 @@ static int udf_fill_partdesc_info(struct super_block *sb,
 				phd->unallocSpaceBitmap.extPosition);
 		map->s_partition_flags |= UDF_PART_FLAG_UNALLOC_BITMAP;
 		/* Check whether math over bitmap won't overflow. */
-		if (check_add_overflow(map->s_partition_len,
-				       sizeof(struct spaceBitmapDesc) << 3,
-				       &sum)) {
+		if (check_add_overflow((size_t)map->s_partition_len,
+                		       (size_t)(sizeof(struct spaceBitmapDesc) << 3),
+                       			(size_t *)&sum)) {
 			udf_err(sb, "Partition %d is too long (%u)\n", p_index,
 				map->s_partition_len);
 			return -EFSCORRUPTED;

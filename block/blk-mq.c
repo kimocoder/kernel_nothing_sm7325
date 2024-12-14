@@ -619,7 +619,8 @@ static void __blk_mq_complete_request(struct request *rq)
 		rq->csd.func = __blk_mq_complete_request_remote;
 		rq->csd.info = rq;
 		rq->csd.flags = 0;
-		smp_call_function_single_async(ctx->cpu, &rq->csd);
+		smp_call_function_single_async(ctx->cpu, (void *)(&rq->csd));
+		//smp_call_function_single_async(ctx->cpu, &rq->csd);
 	} else {
 		q->mq_ops->complete(rq);
 	}
@@ -3013,7 +3014,7 @@ struct request_queue *blk_mq_init_allocated_queue(struct blk_mq_tag_set *set,
 		goto err_hctxs;
 
 	INIT_WORK(&q->timeout_work, blk_mq_timeout_work);
-	blk_queue_rq_timeout(q, set->timeout ? set->timeout : 30 * HZ);
+	blk_queue_rq_timeout(q, set->timeout ? set->timeout : msecs_to_jiffies(30000));
 
 	q->tag_set = set;
 

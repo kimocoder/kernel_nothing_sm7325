@@ -2199,8 +2199,10 @@ int8_t udf_current_aext(struct inode *inode, struct extent_position *epos,
 		if (!epos->offset)
 			epos->offset = sizeof(struct allocExtDesc);
 		ptr = epos->bh->b_data + epos->offset;
-		if (check_add_overflow(sizeof(struct allocExtDesc),
-				le32_to_cpu(header->lengthAllocDescs), &alen))
+		if (check_add_overflow((size_t)sizeof(struct allocExtDesc),
+                       (size_t)le32_to_cpu(header->lengthAllocDescs),
+                       (size_t *)&alen))
+
 			return -1;
 	}
 
